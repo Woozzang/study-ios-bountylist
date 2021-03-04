@@ -28,18 +28,17 @@ class BountyViewController: UIViewController {
   
   // 기술부채가 존재
   // 각각의 배열이 더블링 되어 있지 않기 때문에 추가, 삭제, 정렬 작업 시 따로 관리해줘야함
-
+  
+  let viewModel = BountyViewModel.shared
+  
   override func viewDidLoad() {
     super.viewDidLoad()
-      // Do any additional setup after loading the view.
   }
   
   override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
     
     if segue.identifier == "showDetail" {
-      let vc = segue.destination as? DetailViewController
-      
-      if let index = sender as? Int { vc?.bountyInfo = BountyInfo.bountyInfoList[index] }
+      viewModel.selectedCellIndex = sender as? Int
     }
   }
 }
@@ -49,7 +48,7 @@ class BountyViewController: UIViewController {
 extension BountyViewController: UITableViewDataSource {
   
   func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-    return BountyInfo.bountyInfoList.count
+    return viewModel.numOfBountyInfolist
   }
   
   func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -58,12 +57,10 @@ extension BountyViewController: UITableViewDataSource {
       return UITableViewCell()
     }
     
-    let info = BountyInfo.bountyInfoList[indexPath.row]
+    guard let info = viewModel.bountyInfo(at: indexPath.row) else { return UITableViewCell() }
     
-    cell.nameLable.text = info.name
-    cell.bountyLable.text = String(info.bounty)
-    cell.imgView.image = UIImage(named: info.name)
-    
+    cell.update(with: info)
+
     return cell
   }
 }
@@ -72,15 +69,21 @@ extension BountyViewController: UITableViewDataSource {
 extension BountyViewController: UITableViewDelegate {
   
   func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-    print("---> \(indexPath.row)")
     performSegue(withIdentifier: "showDetail", sender:  indexPath.row)
   }
 }
 
 // MARK: Custom TableView Cell
 class ListCell: UITableViewCell {
+  
+  //MARK: IBOutlets
   @IBOutlet weak var imgView: UIImageView!
   @IBOutlet weak var nameLable: UILabel!
   @IBOutlet weak var bountyLable: UILabel!
+  
+  func update(with info: BountyInfo) {
+    nameLable.text = info.name
+    bountyLable.text = String(info.bounty)
+    imgView.image = UIImage(named: info.name)
+  }
 }
-

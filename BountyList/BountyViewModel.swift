@@ -24,6 +24,17 @@ class BountyViewModel {
     BountyInfo(name: "zoro", bounty: 120000000)
   ]
   
+  var sortedList: [BountyInfo] {
+    let sortedList = bountyInfoList.sorted { (prev, next) -> Bool in
+      return prev.bounty > next.bounty
+    }
+    
+    return sortedList
+  }
+  
+  // Concerned with DetailViewController
+  var selectedCellIndex: Int?
+  
   var numOfBountyInfolist: Int {
     return bountyInfoList.count
   }
@@ -31,6 +42,6 @@ class BountyViewModel {
   func bountyInfo(at index: Int) -> BountyInfo? {
     guard index >= 0, numOfBountyInfolist > 0 else { return nil }
     
-    return self.bountyInfoList[index]
+    return self.sortedList[index]
   }
 }

@@ -30,20 +30,15 @@ class DetailViewController: UIViewController {
   @IBOutlet weak var nameLable: UILabel!
   @IBOutlet weak var bountyLable: UILabel!
   
-//  var name: String?
-//  var bounty: Int?
-  
-  var bountyInfo: BountyInfo?
+  var viewModel = BountyViewModel.shared
   
   override func viewDidLoad() {
       super.viewDidLoad()
       updateUI()
-        // Do any additional setup after loading the view.
     }
   
   func updateUI() {
-    
-    if let bountyInfo = self.bountyInfo {
+    if let index = viewModel.selectedCellIndex, let bountyInfo = viewModel.bountyInfo(at: index) {
       imgView.image = UIImage(named: "\(bountyInfo.name)")
       nameLable.text = bountyInfo.name
       bountyLable.text = String(bountyInfo.bounty)
