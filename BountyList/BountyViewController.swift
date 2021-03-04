@@ -39,11 +39,7 @@ class BountyViewController: UIViewController {
     if segue.identifier == "showDetail" {
       let vc = segue.destination as? DetailViewController
       
-      if let index = sender as? Int {
-        let info = BountyInfo.bountyInfoList[index]
-        vc?.name = info.name
-        vc?.bounty = info.bounty
-      }
+      if let index = sender as? Int { vc?.bountyInfo = BountyInfo.bountyInfoList[index] }
     }
   }
 }
@@ -51,6 +47,7 @@ class BountyViewController: UIViewController {
 
 // MARK: UITableViewDataSource
 extension BountyViewController: UITableViewDataSource {
+  
   func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
     return BountyInfo.bountyInfoList.count
   }
@@ -71,7 +68,7 @@ extension BountyViewController: UITableViewDataSource {
   }
 }
 
-// Mark: UITableViewDelegate
+// MARK: UITableViewDelegate
 extension BountyViewController: UITableViewDelegate {
   
   func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
